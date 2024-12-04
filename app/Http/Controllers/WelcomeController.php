@@ -10,8 +10,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        // $Customers = Customer::all();
-        // return response()->json($Customers);
-        return response("hej");
+        $Customers = Customer::all();
+        return response()->json($Customers);
     }
 }
