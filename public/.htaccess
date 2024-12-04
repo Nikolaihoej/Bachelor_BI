@@ -2,6 +2,19 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
+    
+    <IfModule mod_headers.c>
+        # Tillad CORS for alle oprindelser
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Header set Access-Control-Allow-Headers "Origin, Content-Type, Authorization, X-Requested-With"
+
+        # Håndter OPTIONS forespørgsler
+        <FilesMatch "\.(?:css|js|html)$">
+            Header set Access-Control-Allow-Origin "*"
+        </FilesMatch>
+    </IfModule>
+
 
     RewriteEngine On
 
