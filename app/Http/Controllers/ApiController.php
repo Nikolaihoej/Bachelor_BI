@@ -8,7 +8,11 @@ class ApiController extends Controller
 {
     public function index()
     {
-        // return response("hej");
+        $Customers = Customer::all();
+        return response()->json($Customers);
+    }
+    public function customers()
+    {
         $Customers = Customer::all();
         return response()->json($Customers);
     }
