@@ -11,6 +11,7 @@ class CustomerActivityStatusFactory extends Factory
 
     public function definition(): array
     {
+        $memberSinceMonths = fake()->numberBetween(1,12);
         // Generer en tilfældig værdi for om kunden har trænet sidste måned
         $hasTrainedLastMonth = fake()->boolean();
     
@@ -25,6 +26,7 @@ class CustomerActivityStatusFactory extends Factory
         }
     
         return [
+            'MemberSinceMonths' => $memberSinceMonths,
             'HasTrainedLastMonth' => $hasTrainedLastMonth,
             'DaysSinceLastVisit' => $daysSinceLastVisit,
             'TrainingSessionsThisMonth' => $trainingSessionsThisMonth,

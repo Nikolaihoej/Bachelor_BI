@@ -12,6 +12,7 @@ class CustomerActivityStatus extends Model
     protected $primaryKey = 'ActivityStatusID'; // Primær nøgle
 
     protected $fillable = [
+        'MemberSinceMonths',
         'HasTrainedLastMonth',
         'DaysSinceLastVisit',
         'TrainingSessionsThisMonth',

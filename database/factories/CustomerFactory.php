@@ -21,7 +21,7 @@ class CustomerFactory extends Factory
         return [ 
             'Name' => fake()->name(),
             'Address' => fake()->address(),
-            'Age' => fake()->numberBetween($int1 = 10, $int2 = 100),
+            'Age' => fake()->numberBetween($int1 = 10, $int2 = 60),
         ];
     }
 }

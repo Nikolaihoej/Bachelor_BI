@@ -17,6 +17,7 @@ return new class extends Migration
         // Create the table
         Schema::create('customer_activity_status', function (Blueprint $table) {
             $table->id('ActivityStatusID'); // Autoincrement as primary key
+            $table->integer('MemberSinceMonths');
             $table->boolean('HasTrainedLastMonth');
             $table->integer('DaysSinceLastVisit');
             $table->integer('TrainingSessionsThisMonth');
