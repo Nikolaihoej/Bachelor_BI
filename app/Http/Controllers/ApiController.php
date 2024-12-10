@@ -45,6 +45,7 @@ class ApiController extends Controller
         $CustomerAges = Customer::pluck('Age');
         return response()->json($CustomerAges);
     }
+    
 
     /*
       customer_activity_status table

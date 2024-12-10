@@ -12,17 +12,16 @@ class CustomerActivityStatusFactory extends Factory
     public function definition(): array
     {
         $memberSinceMonths = fake()->numberBetween(1,12);
-        // Generer en tilfældig værdi for om kunden har trænet sidste måned
         $hasTrainedLastMonth = fake()->boolean();
     
-        // Hvis kunden har trænet sidste måned, sættes DaysSinceLastVisit til et lavt tal og TrainingSessionsThisMonth til et tal større end 0
+        // Hvis $hasTrainedLastMonth = true, er DaysSinceLastVisit = et tal mellem 1 og 30
         if ($hasTrainedLastMonth) {
-            $daysSinceLastVisit = fake()->numberBetween(1, 30); // Kunden har besøgt nylig
-            $trainingSessionsThisMonth = fake()->numberBetween(1, 10); // Kunden har trænet flere gange denne måned
+            $daysSinceLastVisit = fake()->numberBetween(1, 30); 
+            $trainingSessionsThisMonth = fake()->numberBetween(1, 10); 
         } else {
-            // Hvis kunden ikke har trænet sidste måned, sættes DaysSinceLastVisit til et højere tal og TrainingSessionsThisMonth til 0
-            $daysSinceLastVisit = fake()->numberBetween(31, 365); // Kunden har ikke besøgt på lang tid
-            $trainingSessionsThisMonth = 0; // Ingen træning denne måned
+            // Hvis $hasTrainedLastMonth = false, er DaysSinceLastVisit = et tal mellem 31 og 365
+            $daysSinceLastVisit = fake()->numberBetween(31, 365); 
+            $trainingSessionsThisMonth = 0; 
         }
     
         return [
