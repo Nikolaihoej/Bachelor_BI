@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerActivityStatus;
 use App\Models\MembershipType;
+use App\Models\FactTable;
 
 class ApiController extends Controller
 {
@@ -22,8 +23,8 @@ class ApiController extends Controller
             $header = fgetcsv($handle, 1000, ',');
 
             // Define the valid fields for each model
-            $validCustomerFields = ['CustomerID', 'Name'];
-            $validActivityStatusFields = ['ActivityStatus'];
+            $validCustomerFields = ['CustomerID', 'Name', 'Address', 'Age'];
+            $validActivityStatusFields = ['ActivityStatus', 'ActivityStatusID', 'MemberSinceMonths', 'HasTrainedLastMonth' , 'DaysSinceLastVisit' , 'TrainingSessionsThisMonth' , 'created_at', 'updated_at' ];
             $validMembershipTypeFields = ['MembershipTypeID', 'MembershipType'];
 
             // Check if the CSV header contains any valid fields
@@ -68,6 +69,15 @@ class ApiController extends Controller
         }
 
         return response()->json(['message' => 'CSV data imported successfully']);
+    }
+
+
+
+    public function all()
+    {
+        $factTables = FactTable::with(['customer', 'activityStatus', 'membershipType'])->get();
+
+        return response()->json($factTables);
     }
     
 

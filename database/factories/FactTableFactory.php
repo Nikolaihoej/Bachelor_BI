@@ -13,10 +13,21 @@ class FactTableFactory extends Factory
 
     public function definition()
     {
+        static $customerID = 1;
+        static $activityStatusID = 1;
+
+        if ($customerID > 100) {
+            $customerID = 1;
+        }
+
+        if ($activityStatusID > 100) {
+            $activityStatusID = 1;
+        }
+
         return [
-            'CustomerID' => Customer::inRandomOrder()->first()->CustomerID, // Relateret til customers
-            'MembershipTypeID' => MembershipType::inRandomOrder()->first()->MembershipTypeID, // Relateret til membership_types
-            'ActivityStatusID' => CustomerActivityStatus::inRandomOrder()->first()->ActivityStatusID, // Relateret til customer_activity_status
+            'CustomerID' => $customerID++, // Unique number between 1 and 100
+            'ActivityStatusID' => $activityStatusID++, // Another unique number between 1 and 100
+            'MembershipTypeID' => MembershipType::orderBy('MembershipTypeID')->first()->MembershipTypeID, // Relateret til membership_types
         ];
     }
 }

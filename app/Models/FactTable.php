@@ -15,4 +15,19 @@ class FactTable extends Model
         'MembershipTypeID',
         'ActivityStatusID',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'CustomerID', 'CustomerID');
+    }
+
+    public function activityStatus()
+    {
+        return $this->belongsTo(CustomerActivityStatus::class, 'ActivityStatusID', 'ActivityStatusID');
+    }
+
+    public function membershipType()
+    {
+        return $this->belongsTo(MembershipType::class, 'MembershipTypeID', 'MembershipTypeID');
+    }
 }

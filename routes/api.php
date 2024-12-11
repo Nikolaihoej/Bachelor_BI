@@ -6,6 +6,9 @@ use App\Http\Controllers\ApiController;
 
 Route::post('/api/csv',                         [ApiController::class, 'csv']);
 
+
+Route::get('/api/all',                          [ApiController::class, 'all']);
+
 Route::get('/api/customers',                    [ApiController::class, 'customers']);
 Route::get('/api/customerid',                   [ApiController::class, 'customerID']);
 Route::get('/api/customername',                 [ApiController::class, 'customerName']);
