@@ -15,5 +15,6 @@ class Customer extends Model
         'Name',
         'Address',
         'Age',
+        'Signup_Date',
     ];
 }

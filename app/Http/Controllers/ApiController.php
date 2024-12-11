@@ -45,6 +45,12 @@ class ApiController extends Controller
         $CustomerAges = Customer::pluck('Age');
         return response()->json($CustomerAges);
     }
+
+    public function signupDate()
+    {
+        $signupDate = Customer::pluck('Signup_Date');
+        return response()->json($signupDate);
+    }
     
 
     /*

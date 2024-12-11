@@ -9,6 +9,7 @@ Route::get('/api/customerid',                   [ApiController::class, 'customer
 Route::get('/api/customername',                 [ApiController::class, 'customerName']);
 Route::get('/api/customeraddress',              [ApiController::class, 'customerAddress']);
 Route::get('/api/customerage',                  [ApiController::class, 'customerAge']);
+Route::get('/api/signupdate',                   [ApiController::class, 'signupDate']);
 
 Route::get('/api/customersactivitystatus',      [ApiController::class, 'customersactivitystatus']);
 Route::get('/api/activitystatusid',             [ApiController::class, 'activityStatusID']);
