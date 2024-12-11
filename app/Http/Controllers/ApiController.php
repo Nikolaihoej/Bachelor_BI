@@ -11,6 +11,67 @@ class ApiController extends Controller
 {
 
     /*
+        Handeling of importing CSV file
+    */
+    public function csv(Request $request)
+    {
+        $file = $request->file('csv_file');
+
+        if (($handle = fopen($file, 'r')) !== false) {
+            // Get the header row
+            $header = fgetcsv($handle, 1000, ',');
+
+            // Define the valid fields for each model
+            $validCustomerFields = ['CustomerID', 'Name'];
+            $validActivityStatusFields = ['ActivityStatus'];
+            $validMembershipTypeFields = ['MembershipTypeID', 'MembershipType'];
+
+            // Check if the CSV header contains any valid fields
+            $validFields = array_merge($validCustomerFields, $validActivityStatusFields, $validMembershipTypeFields);
+            $matchedFields = array_intersect($header, $validFields);
+
+            if (empty($matchedFields)) {
+                return response()->json(['error' => 'CSV does not contain any valid fields'], 400);
+            }
+
+            // Loop through the file and insert data into the database
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+                $csvData = array_combine($header, $data);
+
+                // Insert or update Customer data
+                $customerData = array_intersect_key($csvData, array_flip($validCustomerFields));
+                if (!empty($customerData)) {
+                    $customer = Customer::updateOrCreate(
+                        ['CustomerID' => $csvData['CustomerID']],
+                        $customerData
+                    );
+                }
+
+                // Insert or update CustomerActivityStatus data
+                if (isset($csvData['ActivityStatus'])) {
+                    CustomerActivityStatus::updateOrCreate(
+                        ['customer_id' => $customer->id],
+                        ['status' => $csvData['ActivityStatus']]
+                    );
+                }
+
+                // Insert or update MembershipType data
+                if (isset($csvData['MembershipTypeID']) && isset($csvData['MembershipType'])) {
+                    MembershipType::updateOrCreate(
+                        ['id' => $csvData['MembershipTypeID']],
+                        ['type' => $csvData['MembershipType']]
+                    );
+                }
+            }
+
+            fclose($handle);
+        }
+
+        return response()->json(['message' => 'CSV data imported successfully']);
+    }
+    
+
+    /*
         Customers table
     */
     public function customers()
