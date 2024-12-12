@@ -15,12 +15,12 @@ class ApiController extends Controller
     /*
         Handeling of importing CSV file
     */
-    public function csv(Request $request)
+    public function csv()
     {
-        // Validate the uploaded file
-        $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt',
-        ]);
+        // // Validate the uploaded file
+        // $request->validate([
+        //     'csv_file' => 'required|file|mimes:csv,txt',
+        // ]);
 
         // Store the file
         // $path = $request->file('csv_file')->store('csv_files', 'local');
