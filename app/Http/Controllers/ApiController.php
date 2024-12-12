@@ -34,9 +34,9 @@ class ApiController extends Controller
 
 
         // Validate the file
-        $request->validate([
-            'csv_file' => 'required|file|max:2048|mimes:jpg,png,pdf',
-        ]);
+        // $request->validate([
+        //     'csv_file' => 'required|file|max:2048|mimes:jpg,png,pdf',
+        // ]);
 
         // Store the file
         $path = $request->file('csv_file')->store('uploads');
