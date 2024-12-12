@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 
 
-Route::post('/api/csv',                         [ApiController::class, 'csv']);
+Route::post('/api/csv',                         [ApiController::class, 'csv'])
+->withoutMiddleware([Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 
 Route::get('/api/all',                          [ApiController::class, 'all']);
