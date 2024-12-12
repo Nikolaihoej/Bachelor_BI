@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Customer;
 use App\Models\CustomerActivityStatus;
 use App\Models\MembershipType;
@@ -16,9 +17,16 @@ class ApiController extends Controller
     */
     public function csv(Request $request)
     {
-        $file = $request->file('csv_file');
-        return print_r($file);
-        if (($handle = fopen($file, 'r')) !== false) {
+        // Validate the uploaded file
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        // Store the file
+        $path = $request->file('csv_file')->store('csv_files');
+
+        // Open the file for reading
+        if (($handle = fopen(Storage::path($path), 'r')) !== false) {
             // Get the header row
             $header = fgetcsv($handle, 1000, ',');
 
