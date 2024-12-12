@@ -23,12 +23,15 @@ class ApiController extends Controller
         ]);
 
         // Store the file
-        $path = $request->file('csv_file')->store('csv_files');
+        $path = $request->file('csv_file')->store('csv_files', 'local');
+        
+        
+        return print_r($path);
 
         // Open the file for reading
         if (($handle = fopen(Storage::path($path), 'r')) !== false) {
             // Get the header row
-            $header = fgetcsv($handle, 1000, ',');
+            $header = fgetcsv($handle, 1000, ','); 
 
             // Define the valid fields for each model
             $validCustomerFields = ['CustomerID', 'Name', 'Address', 'Age'];
