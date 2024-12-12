@@ -5,6 +5,10 @@ use App\Http\Controllers\ApiController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 
+Route::get('/csrf-token', function () {
+    return response()->json(['csrfToken' => csrf_token()]);
+});
+
 Route::post('/api/csv',                         [ApiController::class, 'csv'])
 ->withoutMiddleware([Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
