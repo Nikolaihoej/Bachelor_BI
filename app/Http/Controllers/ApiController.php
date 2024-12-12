@@ -17,7 +17,7 @@ class ApiController extends Controller
     public function csv(Request $request)
     {
         $file = $request->file('csv_file');
-
+        return print_r($file);
         if (($handle = fopen($file, 'r')) !== false) {
             // Get the header row
             $header = fgetcsv($handle, 1000, ',');
