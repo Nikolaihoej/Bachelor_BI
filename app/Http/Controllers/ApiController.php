@@ -15,7 +15,7 @@ class ApiController extends Controller
     /*
         Handeling of importing CSV file
     */
-    public function csv()
+    public function csv(Request $request)
     {
         // // Validate the uploaded file
         // $request->validate([
@@ -26,11 +26,25 @@ class ApiController extends Controller
         // $path = $request->file('csv_file')->store('csv_files', 'local');
         //return print_r($path);
         
-        // Store a file
-        Storage::disk('local')->put('csv_file.csv', 'This is sample content.');
+        // // Store a file
+        // Storage::disk('local')->put('csv_file.csv', 'This is sample content.');
 
-        // Retrieve a file
-        $path = Storage::disk('local')->get('csv_file.csv');
+        // // Retrieve a file
+        // $path = Storage::disk('local')->get('csv_file.csv');
+
+
+        // Validate the file
+        $request->validate([
+            'csv_file' => 'required|file|max:2048|mimes:jpg,png,pdf',
+        ]);
+
+        // Store the file
+        $path = $request->file('csv_file')->store('uploads');
+
+        // Optionally, save the file path to your database
+        return response()->json(['path' => $path], 201);
+
+
 
         // Open the file for reading
         if (($handle = fopen(Storage::path($path), 'r')) !== false) {
