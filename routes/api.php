@@ -9,8 +9,7 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrfToken' => csrf_token()]);
 });
 
-Route::post('/api/csv', [ApiController::class, 'csv'])
-    ->withoutMiddleware([VerifyCsrfToken::class]);
+Route::post('/api/csv', [ApiController::class, 'csv']);
 
 
 Route::get('/api/all',                          [ApiController::class, 'all']);
