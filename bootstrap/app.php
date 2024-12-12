@@ -12,6 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
+        
+        // Comment out the CSRF middleware
+
+
+        $middleware->statefulApi();
+        $middleware->validateCsrfTokens(
+        // Specify the routes to exclude from CSRF protection
+        except: ['api/csv']
+        );
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
