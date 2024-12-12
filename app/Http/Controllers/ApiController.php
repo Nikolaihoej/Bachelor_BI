@@ -39,7 +39,7 @@ class ApiController extends Controller
         // ]);
 
         // Store the file
-        $path = $request->file('csv_file')->store('uploads');
+        $path = $request->file('csv_file.csv')->store('uploads');
 
         // Optionally, save the file path to your database
         return response()->json(['path' => $path], 201);
