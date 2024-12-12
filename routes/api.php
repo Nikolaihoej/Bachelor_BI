@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 
 Route::post('/api/csv',                         [ApiController::class, 'csv'])
