@@ -23,10 +23,14 @@ class ApiController extends Controller
         ]);
 
         // Store the file
-        $path = $request->file('csv_file')->store('csv_files', 'local');
+        // $path = $request->file('csv_file')->store('csv_files', 'local');
+        //return print_r($path);
         
-        
-        return print_r($path);
+        // Store a file
+        Storage::disk('local')->put('csv_file.csv', 'This is sample content.');
+
+        // Retrieve a file
+        $path = Storage::disk('local')->get('csv_file.csv');
 
         // Open the file for reading
         if (($handle = fopen(Storage::path($path), 'r')) !== false) {
