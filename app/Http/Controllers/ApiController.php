@@ -97,6 +97,10 @@ class ApiController extends Controller
                 }
 
                 
+                Log::debug('Mapped row: ', $mappedRow); // Log the mapped row for debugging
+                Log::debug('CustomerID: ', $mappedRow['CustomerID']); // Log the mapped row for debugging
+                Log::debug('ActivityStatusID: ', $mappedRow['ActivityStatusID']); // Log the mapped row for debugging
+                
                 // Ensure the customer exists before inserting into the fact_table
                 
                     // Insert data into the customer_activity_status table
@@ -134,8 +138,8 @@ class ApiController extends Controller
 
                     // Insert data into the fact_table
                     FactTable::create([
-                        'CustomerID' => $mappedRow['CustomerID'],
-                        'ActivityStatusID' => $mappedRow['ActivityStatusID'],
+                        'CustomerID' => $customer->CustomerID,
+                        'ActivityStatusID' => $activityStatus->ActivityStatusID,
                         'MembershipTypeID' => $mappedRow['MembershipTypeID'],
                         'created_at' => $mappedRow['created_at'],
                         'updated_at' => $mappedRow['updated_at']
