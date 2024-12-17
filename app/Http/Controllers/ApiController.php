@@ -115,7 +115,7 @@ class ApiController extends Controller
                             'updated_at' => $mappedRow['updated_at']
                         ]
                         );
-                        Log::debug('ActivityStatusID: ', $activityStatus); 
+                        dump($activityStatus); 
                         
                         // Insert data into the customers table
                         $customer = Customer::updateOrCreate(
