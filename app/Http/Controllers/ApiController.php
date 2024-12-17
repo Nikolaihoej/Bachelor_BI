@@ -134,8 +134,8 @@ class ApiController extends Controller
 
                     // Insert data into the fact_table
                     FactTable::create([
-                        'CustomerID' => $customer->CustomerID,
-                        'ActivityStatusID' => $activityStatus->ActivityStatusID,
+                        'CustomerID' => $mappedRow['CustomerID'],
+                        'ActivityStatusID' => $mappedRow['ActivityStatusID'],
                         'MembershipTypeID' => $mappedRow['MembershipTypeID'],
                         'created_at' => $mappedRow['created_at'],
                         'updated_at' => $mappedRow['updated_at']
