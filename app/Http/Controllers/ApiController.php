@@ -20,7 +20,7 @@ class ApiController extends Controller
         Handeling of importing CSV file
     */
  
-    public function csv(Request $request)
+    public function csv(Request $request) 
     {
         // Validate that the file is a CSV
         $request->validate([
@@ -100,7 +100,7 @@ class ApiController extends Controller
                 // Ensure the customer exists before inserting into the fact_table
                 
                     // Insert data into the customer_activity_status table
-                    CustomerActivityStatus::updateOrCreate(
+                    $activityStatus = CustomerActivityStatus::updateOrCreate(
                         ['ActivityStatusID' => $mappedRow['ActivityStatusID']],
                         [
                             'MemberSinceMonths' => $mappedRow['MemberSinceMonths'],
@@ -109,7 +109,7 @@ class ApiController extends Controller
                             'TrainingSessionsThisMonth' => $mappedRow['TrainingSessionsThisMonth'],
                             'created_at' => $mappedRow['created_at'],
                             'updated_at' => $mappedRow['updated_at']
-                            ]
+                        ]
                         );
                         
                         // Insert data into the customers table
@@ -135,7 +135,7 @@ class ApiController extends Controller
                     // Insert data into the fact_table
                     FactTable::create([
                         'CustomerID' => $customer->CustomerID,
-                        'ActivityStatusID' => $mappedRow['ActivityStatusID'],
+                        'ActivityStatusID' => $activityStatus->ActivityStatusID,
                         'MembershipTypeID' => $mappedRow['MembershipTypeID'],
                         'created_at' => $mappedRow['created_at'],
                         'updated_at' => $mappedRow['updated_at']
