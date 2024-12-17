@@ -12,6 +12,7 @@ class Customer extends Model
     protected $primaryKey = 'CustomerID'; // Primær nøgle
 
     protected $fillable = [
+        'CustomerID',
         'Name',
         'Address',
         'Age',
