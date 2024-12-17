@@ -105,7 +105,7 @@ class ApiController extends Controller
                 
                     // Insert data into the customer_activity_status table
                     $activityStatus = CustomerActivityStatus::updateOrCreate(
-                        ['ActivityStatusID' => $mappedRow['ActivityStatusID']],
+                        ['ActivityStatusID' => (int)$mappedRow['ActivityStatusID']],
                         [
                             'MemberSinceMonths' => $mappedRow['MemberSinceMonths'],
                             'HasTrainedLastMonth' => $mappedRow['HasTrainedLastMonth'],
@@ -118,7 +118,7 @@ class ApiController extends Controller
                         
                         // Insert data into the customers table
                         $customer = Customer::updateOrCreate(
-                            ['CustomerID' => $mappedRow['CustomerID']],
+                            ['CustomerID' => (int)$mappedRow['CustomerID']],
                             [
                                 'Name' => $mappedRow['Name'],
                                 'Address' => $mappedRow['Address'],
@@ -129,7 +129,7 @@ class ApiController extends Controller
                         );
                     // Insert data into the membership_types table
                     MembershipType::updateOrCreate(
-                        ['MembershipTypeID' => $mappedRow['MembershipTypeID']],
+                        ['MembershipTypeID' => (int)$mappedRow['MembershipTypeID']],
                         [
                             'created_at' => $mappedRow['created_at'],
                             'updated_at' => $mappedRow['updated_at']
@@ -138,9 +138,9 @@ class ApiController extends Controller
 
                     // Insert data into the fact_table
                     FactTable::create([
-                        'CustomerID' => $customer->CustomerID,
-                        'ActivityStatusID' => $activityStatus->ActivityStatusID,
-                        'MembershipTypeID' => $mappedRow['MembershipTypeID'],
+                        'CustomerID' => (int)$mappedRow['CustomerID'],
+                        'ActivityStatusID' => (int)$mappedRow['ActivityStatusID'],
+                        'MembershipTypeID' => (int)$mappedRow['MembershipTypeID'],
                         'created_at' => $mappedRow['created_at'],
                         'updated_at' => $mappedRow['updated_at']
                     ]);
