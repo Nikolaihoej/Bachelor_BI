@@ -97,7 +97,7 @@ class ApiController extends Controller
                 }
 
                 
-                Log::debug('Mapped row: ', $mappedRow); // Log the mapped row for debugging
+                // Log::debug('Mapped row: ', $mappedRow); // Log the mapped row for debugging
                 // Log::debug('CustomerID: ', $mappedRow['CustomerID']); // Log the mapped row for debugging
                 // Log::debug('ActivityStatusID: ', $mappedRow['ActivityStatusID']); // Log the mapped row for debugging
                 
@@ -115,6 +115,7 @@ class ApiController extends Controller
                             'updated_at' => $mappedRow['updated_at']
                         ]
                         );
+                        Log::debug('ActivityStatusID: ', $activityStatus); 
                         
                         // Insert data into the customers table
                         $customer = Customer::updateOrCreate(
