@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Opret 10 kunder
-        Customer::factory(10)->create();
+        Customer::factory(100)->create();
 
         // Opret 3 medlemskabstyper (Basic, Premium, Student)
         MembershipType::factory()->create([
@@ -30,10 +30,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Opret 10 aktivitet status for kunder
-        CustomerActivityStatus::factory(10)->create();
+        CustomerActivityStatus::factory(100)->create();
 
         // Opret 10 fact-table records (forbindelse mellem kunder, medlemskabstyper og aktivitetstatus)
-        FactTable::factory(10)->create();
+        FactTable::factory(100)->create();
     }
 }
 
