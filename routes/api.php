@@ -4,12 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
-
 Route::get('/csrf-token', function () {
     return response()->json(['csrfToken' => csrf_token()]);
 });
 
-Route::post('/api/csv', [ApiController::class, 'csv']);
+Route::post('/api/csv',                         [ApiController::class, 'csv']);
 
 
 Route::get('/api/all',                          [ApiController::class, 'all']);
@@ -31,3 +30,7 @@ Route::get('/api/trainingsessionsthismonth',    [ApiController::class, 'training
 Route::get('/api/membershiptype',               [ApiController::class, 'membershipType']);
 Route::get('/api/membershiptypeid',             [ApiController::class, 'membershipTypeID']);
 Route::get('/api/typename',                     [ApiController::class, 'typeName']);
+
+Route::fallback(function () {
+    return view('dist/index');
+});
