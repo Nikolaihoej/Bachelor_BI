@@ -12,6 +12,7 @@ class MembershipType extends Model
     protected $primaryKey = 'MembershipTypeID'; // Primær nøgle
 
     protected $fillable = [
+        'MembershipTypeID',
         'TypeName',
     ];
 }
