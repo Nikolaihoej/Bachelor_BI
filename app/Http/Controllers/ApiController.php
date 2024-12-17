@@ -98,8 +98,8 @@ class ApiController extends Controller
 
                 
                 Log::debug('Mapped row: ', $mappedRow); // Log the mapped row for debugging
-                Log::debug('CustomerID: ', $mappedRow['CustomerID']); // Log the mapped row for debugging
-                Log::debug('ActivityStatusID: ', $mappedRow['ActivityStatusID']); // Log the mapped row for debugging
+                // Log::debug('CustomerID: ', $mappedRow['CustomerID']); // Log the mapped row for debugging
+                // Log::debug('ActivityStatusID: ', $mappedRow['ActivityStatusID']); // Log the mapped row for debugging
                 
                 // Ensure the customer exists before inserting into the fact_table
                 
