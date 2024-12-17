@@ -20,142 +20,140 @@ class ApiController extends Controller
         Handeling of importing CSV file
     */
  
-public function csv(Request $request)
-{
-    // Validate that the file is a CSV
-    $request->validate([
-        'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Max 2MB
-    ]);
+    public function csv(Request $request)
+    {
+        // Validate that the file is a CSV
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Max 2MB
+        ]);
 
-    // Get the file from the request
-    $file = $request->file('csv_file');
+        // Get the file from the request
+        $file = $request->file('csv_file');
 
-    // Generate a unique filename to avoid conflicts
-    $filename = uniqid('csv_') . '.' . $file->getClientOriginalExtension();
+        // Generate a unique filename to avoid conflicts
+        $filename = uniqid('csv_') . '.' . $file->getClientOriginalExtension();
 
-    // Save the file in the private folder
-    $path = $file->storeAs('private/csv', $filename);
+        // Save the file in the private folder
+        $path = $file->storeAs('private/csv', $filename);
 
-    // Read the CSV file using League\Csv
-    $csv = Reader::createFromPath(Storage::path($path), 'r');
-    $csv->setHeaderOffset(0); // Set the header offset
+        // Read the CSV file using League\Csv
+        $csv = Reader::createFromPath(Storage::path($path), 'r');
+        $csv->setHeaderOffset(0); // Set the header offset
 
-    // Get the header row
-    $header = $csv->getHeader();
-    Log::info('CSV Header: ', $header); // Log the CSV header for debugging
+        // Get the header row
+        $header = $csv->getHeader();
+        Log::info('CSV Header: ', $header); // Log the CSV header for debugging
 
-    // Map CSV headers to valid fields
-    $headerMap = [
-        'CustomerID' => 'CustomerID',
-        'customer_Name' => 'Name',
-        'customer_Address' => 'Address',
-        'customer_Age' => 'Age',
-        'ActivityStatusID' => 'ActivityStatusID',
-        'activity_status_MemberSinceMonths' => 'MemberSinceMonths',
-        'activity_status_HasTrainedLastMonth' => 'HasTrainedLastMonth',
-        'activity_status_DaysSinceLastVisit' => 'DaysSinceLastVisit',
-        'activity_status_TrainingSessionsThisMonth' => 'TrainingSessionsThisMonth',
-        'MembershipTypeID' => 'MembershipTypeID',
-        'created_at' => 'created_at',
-        'updated_at' => 'updated_at'
-    ];
+        // Map CSV headers to valid fields
+        $headerMap = [
+            'CustomerID' => 'CustomerID',
+            'customer_Name' => 'Name',
+            'customer_Address' => 'Address',
+            'customer_Age' => 'Age',
+            'ActivityStatusID' => 'ActivityStatusID',
+            'activity_status_MemberSinceMonths' => 'MemberSinceMonths',
+            'activity_status_HasTrainedLastMonth' => 'HasTrainedLastMonth',
+            'activity_status_DaysSinceLastVisit' => 'DaysSinceLastVisit',
+            'activity_status_TrainingSessionsThisMonth' => 'TrainingSessionsThisMonth',
+            'MembershipTypeID' => 'MembershipTypeID',
+            'created_at' => 'created_at',
+            'updated_at' => 'updated_at'
+        ];
 
-    // Check if the CSV header contains any valid fields
-    $matchedFields = array_intersect($header, array_keys($headerMap));
+        // Check if the CSV header contains any valid fields
+        $matchedFields = array_intersect($header, array_keys($headerMap));
 
-    if (empty($matchedFields)) {
-        Log::error('CSV does not contain any valid fields');
-        return response()->json(['error' => 'CSV indeholder ikke gyldige felter'], 400);
-    }
-
-    DB::beginTransaction();
-    try {
-        // Create a statement to process the CSV
-        $stmt = (new Statement());
-
-        // Loop through the file and insert data into the database
-        foreach ($stmt->process($csv) as $record) {
-            Log::info('Parsed row: ', $record); // Log the parsed row for debugging
-
-            // Map the row to the valid fields
-            $mappedRow = [];
-            foreach ($headerMap as $csvField => $dbField) {
-                $mappedRow[$dbField] = $record[$csvField] ?? null;
-            }
-
-            // Validate and clean data
-            $mappedRow['Age'] = filter_var($mappedRow['Age'], FILTER_VALIDATE_INT);
-            if ($mappedRow['Age'] === false) {
-                Log::error('Invalid Age value in row: ', $record);
-                continue; // Skip this row
-            }
-
-            // Check for required fields
-            if (empty($mappedRow['Name']) || empty($mappedRow['Address']) || empty($mappedRow['Age'])) {
-                Log::error('Missing required fields in row: ', $record);
-                continue; // Skip this row
-            }
-
-            // Insert data into the customers table
-            $customer = Customer::updateOrCreate(
-                ['CustomerID' => $mappedRow['CustomerID']],
-                [
-                    'Name' => $mappedRow['Name'],
-                    'Address' => $mappedRow['Address'],
-                    'Age' => $mappedRow['Age'],
-                    'created_at' => $mappedRow['created_at'],
-                    'updated_at' => $mappedRow['updated_at']
-                ]
-            );
-
-            // Ensure the customer exists before inserting into the fact_table
-            if ($customer) {
-                // Insert data into the customer_activity_status table
-                CustomerActivityStatus::updateOrCreate(
-                    ['ActivityStatusID' => $mappedRow['ActivityStatusID']],
-                    [
-                        'MemberSinceMonths' => $mappedRow['MemberSinceMonths'],
-                        'HasTrainedLastMonth' => $mappedRow['HasTrainedLastMonth'],
-                        'DaysSinceLastVisit' => $mappedRow['DaysSinceLastVisit'],
-                        'TrainingSessionsThisMonth' => $mappedRow['TrainingSessionsThisMonth'],
-                        'created_at' => $mappedRow['created_at'],
-                        'updated_at' => $mappedRow['updated_at']
-                    ]
-                );
-
-                // Insert data into the membership_types table
-                MembershipType::updateOrCreate(
-                    ['MembershipTypeID' => $mappedRow['MembershipTypeID']],
-                    [
-                        'created_at' => $mappedRow['created_at'],
-                        'updated_at' => $mappedRow['updated_at']
-                    ]
-                );
-
-                // Insert data into the fact_table
-                FactTable::create([
-                    'CustomerID' => $customer->CustomerID,
-                    'ActivityStatusID' => $mappedRow['ActivityStatusID'],
-                    'MembershipTypeID' => $mappedRow['MembershipTypeID'],
-                    'created_at' => $mappedRow['created_at'],
-                    'updated_at' => $mappedRow['updated_at']
-                ]);
-            } else {
-                Log::error('Failed to create or update customer for CustomerID: ' . $mappedRow['CustomerID']);
-            }
+        if (empty($matchedFields)) {
+            Log::error('CSV does not contain any valid fields');
+            return response()->json(['error' => 'CSV indeholder ikke gyldige felter'], 400);
         }
-        DB::commit();
-    } catch (\Exception $e) {
-        DB::rollback();
-        Log::error('Error inserting CSV data: ' . $e->getMessage());
-        return response()->json(['error' => 'Fejl ved indsættelse af data: ' . $e->getMessage()], 500);
-    }
 
-    // Return a success message
-    return response()->json([
-        'message' => 'Data blev succesfuldt gemt i databasen!',
-    ]);
-}
+        DB::beginTransaction();
+        try {
+            // Create a statement to process the CSV
+            $stmt = (new Statement());
+
+            // Loop through the file and insert data into the database
+            foreach ($stmt->process($csv) as $record) {
+                Log::info('Parsed row: ', $record); // Log the parsed row for debugging
+
+                // Map the row to the valid fields
+                $mappedRow = [];
+                foreach ($headerMap as $csvField => $dbField) {
+                    $mappedRow[$dbField] = $record[$csvField] ?? null;
+                }
+
+                // Validate and clean data
+                $mappedRow['Age'] = filter_var($mappedRow['Age'], FILTER_VALIDATE_INT);
+                if ($mappedRow['Age'] === false) {
+                    Log::error('Invalid Age value in row: ', $record);
+                    continue; // Skip this row
+                }
+
+                // Check for required fields
+                if (empty($mappedRow['Name']) || empty($mappedRow['Address']) || empty($mappedRow['Age'])) {
+                    Log::error('Missing required fields in row: ', $record);
+                    continue; // Skip this row
+                }
+
+                
+                // Ensure the customer exists before inserting into the fact_table
+                
+                    // Insert data into the customer_activity_status table
+                    CustomerActivityStatus::updateOrCreate(
+                        ['ActivityStatusID' => $mappedRow['ActivityStatusID']],
+                        [
+                            'MemberSinceMonths' => $mappedRow['MemberSinceMonths'],
+                            'HasTrainedLastMonth' => $mappedRow['HasTrainedLastMonth'],
+                            'DaysSinceLastVisit' => $mappedRow['DaysSinceLastVisit'],
+                            'TrainingSessionsThisMonth' => $mappedRow['TrainingSessionsThisMonth'],
+                            'created_at' => $mappedRow['created_at'],
+                            'updated_at' => $mappedRow['updated_at']
+                            ]
+                        );
+                        
+                        // Insert data into the customers table
+                        $customer = Customer::updateOrCreate(
+                            ['CustomerID' => $mappedRow['CustomerID']],
+                            [
+                                'Name' => $mappedRow['Name'],
+                                'Address' => $mappedRow['Address'],
+                                'Age' => $mappedRow['Age'],
+                                'created_at' => $mappedRow['created_at'],
+                                'updated_at' => $mappedRow['updated_at']
+                            ]
+                        );
+                    // Insert data into the membership_types table
+                    MembershipType::updateOrCreate(
+                        ['MembershipTypeID' => $mappedRow['MembershipTypeID']],
+                        [
+                            'created_at' => $mappedRow['created_at'],
+                            'updated_at' => $mappedRow['updated_at']
+                        ]
+                    );
+
+                    // Insert data into the fact_table
+                    FactTable::create([
+                        'CustomerID' => $customer->CustomerID,
+                        'ActivityStatusID' => $mappedRow['ActivityStatusID'],
+                        'MembershipTypeID' => $mappedRow['MembershipTypeID'],
+                        'created_at' => $mappedRow['created_at'],
+                        'updated_at' => $mappedRow['updated_at']
+                    ]);
+
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Error inserting CSV data: ' . $e->getMessage());
+            return response()->json(['error' => 'Fejl ved indsættelse af data: ' . $e->getMessage()], 500);
+        }
+
+        // Return a success message
+        return response()->json([
+            'message' => 'Data blev succesfuldt gemt i databasen!',
+        ]);
+    }
 
 
 
