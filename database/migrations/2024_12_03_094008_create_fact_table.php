@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('CustomerID')->references('CustomerID')->on('customers')->onDelete('cascade');
             $table->foreign('MembershipTypeID')->references('MembershipTypeID')->on('membership_types')->onDelete('cascade');
             $table->foreign('ActivityStatusID')->references('ActivityStatusID')->on('customer_activity_status')->onDelete('cascade');
+
+            $table->unique(['ActivityStatusID', 'CustomerID']);
     
             $table->timestamps();
         });
