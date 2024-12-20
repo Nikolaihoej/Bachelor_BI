@@ -20,7 +20,7 @@ Route::get('/api/customeraddress',              [ApiController::class, 'customer
 Route::get('/api/customerage',                  [ApiController::class, 'customerAge']);
 Route::get('/api/signupdate',                   [ApiController::class, 'signupDate']);
 
-Route::get('/api/customersactivitystatus',      [ApiController::class, 'customersactivitystatus']);
+Route::get('/api/customersactivitystatus',      [ApiController::class, 'customersActivityStatus']);
 Route::get('/api/activitystatusid',             [ApiController::class, 'activityStatusID']);
 Route::get('/api/membersincemonths',            [ApiController::class, 'memberSinceMonths']);
 Route::get('/api/hastrainedlastmonth',          [ApiController::class, 'hasTrainedLastMonth']);

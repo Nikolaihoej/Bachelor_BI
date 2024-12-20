@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,12 +14,10 @@ use App\Models\FactTable;
 
 class ApiController extends Controller
 {
-
     /*
         Handeling of importing CSV file
     */
- 
-    public function csv(Request $request) 
+    public function csv(Request $request)
     {
         // Validate that the file is a CSV
         $request->validate([
@@ -29,20 +26,16 @@ class ApiController extends Controller
 
         // Get the file from the request
         $file = $request->file('csv_file');
-
-        // Generate a unique filename to avoid conflicts
-        $filename = uniqid('csv_') . '.' . $file->getClientOriginalExtension();
-
-        // Save the file in the private folder
-        $path = $file->storeAs('private/csv', $filename);
+        $fileName = uniqid('csv_') . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('private/csv', $fileName);
 
         // Read the CSV file using League\Csv
         $csv = Reader::createFromPath(Storage::path($path), 'r');
-        $csv->setHeaderOffset(0); // Set the header offset
+        $csv->setHeaderOffset(0); 
 
         // Get the header row
         $header = $csv->getHeader();
-        Log::info('CSV Header: ', $header); // Log the CSV header for debugging
+        Log::info('CSV Header: ', $header);
 
         // Map CSV headers to valid fields
         $headerMap = [
@@ -70,82 +63,66 @@ class ApiController extends Controller
 
         DB::beginTransaction();
         try {
-            // Create a statement to process the CSV
+            // Process the CSV file
             $stmt = (new Statement());
 
-            // Loop through the file and insert data into the database
             foreach ($stmt->process($csv) as $record) {
-                Log::info('Parsed row: ', $record); // Log the parsed row for debugging
+                Log::info('Parsed row: ', $record); 
 
-                // Map the row to the valid fields
                 $mappedRow = [];
                 foreach ($headerMap as $csvField => $dbField) {
                     $mappedRow[$dbField] = $record[$csvField] ?? null;
                 }
 
-                // Validate and clean data
                 $mappedRow['Age'] = filter_var($mappedRow['Age'], FILTER_VALIDATE_INT);
                 if ($mappedRow['Age'] === false) {
                     Log::error('Invalid Age value in row: ', $record);
-                    continue; // Skip this row
+                    continue; 
                 }
 
-                // Check for required fields
                 if (empty($mappedRow['Name']) || empty($mappedRow['Address']) || empty($mappedRow['Age'])) {
                     Log::error('Missing required fields in row: ', $record);
-                    continue; // Skip this row
+                    continue; 
                 }
 
-                
-                // Log::debug('Mapped row: ', $mappedRow); // Log the mapped row for debugging
-                // Log::debug('CustomerID: ', $mappedRow['CustomerID']); // Log the mapped row for debugging
-                // Log::debug('ActivityStatusID: ', $mappedRow['ActivityStatusID']); // Log the mapped row for debugging
-                
-                // Ensure the customer exists before inserting into the fact_table
-                
-                    // Insert data into the customer_activity_status table
-                    $activityStatus = CustomerActivityStatus::updateOrCreate(
-                        ['ActivityStatusID' => (int)$mappedRow['ActivityStatusID']],
-                        [
-                            'MemberSinceMonths' => $mappedRow['MemberSinceMonths'],
-                            'HasTrainedLastMonth' => $mappedRow['HasTrainedLastMonth'],
-                            'DaysSinceLastVisit' => $mappedRow['DaysSinceLastVisit'],
-                            'TrainingSessionsThisMonth' => $mappedRow['TrainingSessionsThisMonth'],
-                            'created_at' => $mappedRow['created_at'],
-                            'updated_at' => $mappedRow['updated_at']
-                        ]
-                        );
-                        Log::info(print_r($activityStatus, true)); 
-                        
-                        // Insert data into the customers table
-                        $customer = Customer::updateOrCreate(
-                            ['CustomerID' => (int)$mappedRow['CustomerID']],
-                            [
-                                'Name' => $mappedRow['Name'],
-                                'Address' => $mappedRow['Address'],
-                                'Age' => $mappedRow['Age'],
-                                'created_at' => $mappedRow['created_at'],
-                                'updated_at' => $mappedRow['updated_at']
-                            ]
-                        );
-                    // Insert data into the membership_types table
-                    MembershipType::updateOrCreate(
-                        ['MembershipTypeID' => (int)$mappedRow['MembershipTypeID']],
-                        [
-                            'created_at' => $mappedRow['created_at'],
-                            'updated_at' => $mappedRow['updated_at']
-                        ]
-                    );
-
-                    // Insert data into the fact_table
-                    FactTable::create([
-                        'CustomerID' => (int)$mappedRow['CustomerID'],
-                        'ActivityStatusID' => (int)$mappedRow['ActivityStatusID'],
-                        'MembershipTypeID' => (int)$mappedRow['MembershipTypeID'],
+                $activityStatus = CustomerActivityStatus::updateOrCreate(
+                    ['ActivityStatusID' => (int)$mappedRow['ActivityStatusID']],
+                    [
+                        'MemberSinceMonths' => $mappedRow['MemberSinceMonths'],
+                        'HasTrainedLastMonth' => $mappedRow['HasTrainedLastMonth'],
+                        'DaysSinceLastVisit' => $mappedRow['DaysSinceLastVisit'],
+                        'TrainingSessionsThisMonth' => $mappedRow['TrainingSessionsThisMonth'],
                         'created_at' => $mappedRow['created_at'],
                         'updated_at' => $mappedRow['updated_at']
-                    ]);
+                    ]
+                );
 
+                $customer = Customer::updateOrCreate(
+                    ['CustomerID' => (int)$mappedRow['CustomerID']],
+                    [
+                        'Name' => $mappedRow['Name'],
+                        'Address' => $mappedRow['Address'],
+                        'Age' => $mappedRow['Age'],
+                        'created_at' => $mappedRow['created_at'],
+                        'updated_at' => $mappedRow['updated_at']
+                    ]
+                );
+
+                MembershipType::updateOrCreate(
+                    ['MembershipTypeID' => (int)$mappedRow['MembershipTypeID']],
+                    [
+                        'created_at' => $mappedRow['created_at'],
+                        'updated_at' => $mappedRow['updated_at']
+                    ]
+                );
+
+                FactTable::create([
+                    'CustomerID' => (int)$mappedRow['CustomerID'],
+                    'ActivityStatusID' => (int)$mappedRow['ActivityStatusID'],
+                    'MembershipTypeID' => (int)$mappedRow['MembershipTypeID'],
+                    'created_at' => $mappedRow['created_at'],
+                    'updated_at' => $mappedRow['updated_at']
+                ]);
             }
             DB::commit();
         } catch (\Exception $e) {
@@ -154,56 +131,55 @@ class ApiController extends Controller
             return response()->json(['error' => 'Fejl ved indsættelse af data: ' . $e->getMessage()], 500);
         }
 
-        // Return a success message
         return response()->json([
             'message' => 'Data blev succesfuldt gemt i databasen!',
         ]);
     }
 
-
-
+    /*
+        Get all data
+    */
     public function all()
     {
         $factTables = FactTable::with(['customer', 'activityStatus', 'membershipType'])->get();
 
         return response()->json($factTables);
     }
-    
 
     /*
         Customers table
     */
     public function customers()
     {
-        $Customers = Customer::all();
-        return response()->json($Customers);
+        $customers = Customer::all();
+        return response()->json($customers);
     }
 
     /*
-        Customers column
+        Customers columns
     */
     public function customerID()
     {
-        $CustomerIDs = Customer::pluck('CustomerID');
-        return response()->json($CustomerIDs);
+        $customerIDs = Customer::pluck('CustomerID');
+        return response()->json($customerIDs);
     }
 
     public function customerName()
     {
-        $CustomerNames = Customer::pluck('Name');
-        return response()->json($CustomerNames);
+        $customerNames = Customer::pluck('Name');
+        return response()->json($customerNames);
     }
-    
+
     public function customerAddress()
     {
-        $CustomerAddresses = Customer::pluck('Address');
-        return response()->json($CustomerAddresses);
+        $customerAddresses = Customer::pluck('Address');
+        return response()->json($customerAddresses);
     }
 
     public function customerAge()
     {
-        $CustomerAges = Customer::pluck('Age');
-        return response()->json($CustomerAges);
+        $customerAges = Customer::pluck('Age');
+        return response()->json($customerAges);
     }
 
     public function signupDate()
@@ -211,20 +187,20 @@ class ApiController extends Controller
         $signupDate = Customer::pluck('Signup_Date');
         return response()->json($signupDate);
     }
-    
+
 
     /*
       customer_activity_status table
     */
-    public function customersactivitystatus()
+    public function customersActivityStatus()
     {
-        $customersactivitystatus = CustomerActivityStatus::all();
-        return response()->json($customersactivitystatus);
+        $customersActivityStatus = CustomerActivityStatus::all();
+        return response()->json($customersActivityStatus);
     }
-    
+
     /*
-        customer_activity_status column
-    */    
+        customer_activity_status columns
+    */
     public function activityStatusID()
     {
         $activityStatusID = CustomerActivityStatus::pluck('ActivityStatusID');
@@ -261,13 +237,13 @@ class ApiController extends Controller
     */
     public function membershipType()
     {
-        $membershiptype = MembershipType::all();
-        return response()->json($membershiptype);
+        $membershipType = MembershipType::all();
+        return response()->json($membershipType);
     }
-    
+
     /*
-      membershiptype columns
-    */    
+      membershiptype columnss
+    */
     public function membershipTypeID()
     {
         $membershipTypeID = MembershipType::pluck('MembershipTypeID');
