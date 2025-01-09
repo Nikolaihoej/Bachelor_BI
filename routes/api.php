@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::get('/csrf-token', function () {
@@ -30,6 +31,13 @@ Route::get('/api/trainingsessionsthismonth',    [ApiController::class, 'training
 Route::get('/api/membershiptype',               [ApiController::class, 'membershipType']);
 Route::get('/api/membershiptypeid',             [ApiController::class, 'membershipTypeID']);
 Route::get('/api/typename',                     [ApiController::class, 'typeName']);
+
+
+Route::post('/api/loginUser',                       [AuthController::class, 'loginUser']); 
+
+// post login data
+// get fra database - er dette et korrekt login?
+
 
 Route::fallback(function () {
     return view('dist/index');

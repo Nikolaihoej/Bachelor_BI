@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\MembershipType;
 use App\Models\CustomerActivityStatus;
 use App\Models\FactTable;
+use App\Models\Users;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,25 +16,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create a user
+        Users::factory(1)->create();
+
         // Create 100 Customer records
         Customer::factory(100)->create();
 
-        // Create 3 MembershipTypes (Basic, Premium, Student)
-        MembershipType::factory()->create([
-            'TypeName' => 'Basic',
-        ]);
-        MembershipType::factory()->create([
-            'TypeName' => 'Premium',
-        ]);
-        MembershipType::factory()->create([
-            'TypeName' => 'Student',
-        ]);
+        // Create 3 MembershipTypes (Basic, Premium, Student) without specifying the ID
+        $membershipTypes = ['Basic', 'Premium', 'Student'];
+        foreach ($membershipTypes as $type) {
+            MembershipType::firstOrCreate(['TypeName' => $type]);
+        }
 
         // Create 100 CustomerActivityStatus records
         CustomerActivityStatus::factory(100)->create();
 
         // Create 100 fact-table records
         FactTable::factory(100)->create();
+
+
     }
 }
 
