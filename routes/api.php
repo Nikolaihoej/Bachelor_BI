@@ -9,8 +9,10 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrfToken' => csrf_token()]);
 });
 
-
 Route::post('/api/loginUser', [AuthController::class, 'loginUser']);
+Route::post('/api/register', [AuthController::class, 'register']);
+Route::post('/api/logout', [AuthController::class, 'logout']);
+Route::get('/api/me', [AuthController::class, 'me']);
 
 Route::group(['middleware' => 'jwt'], function () {
     Route::get('/api/all', [ApiController::class, 'all']);
@@ -31,7 +33,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('/api/typename', [ApiController::class, 'typeName']);
 });
 
-Route::post('/api/csv', [ApiController::class, 'csv']);
 Route::fallback(function () {
     return view('dist/index');
 });

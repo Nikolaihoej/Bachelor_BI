@@ -1,10 +1,10 @@
 <?php
-// filepath: /app/Http/Controllers/AuthController.php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\Users;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -17,7 +17,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $user = Auth::user();
+        $user = Auth::users();
         $user->jwt_token = $token;
         $user->save();
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $user = User::create([
+        $user = Users::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
