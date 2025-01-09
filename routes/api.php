@@ -14,7 +14,7 @@ Route::post('/api/register', [AuthController::class, 'register']);
 Route::post('/api/logout', [AuthController::class, 'logout']);
 Route::get('/api/me', [AuthController::class, 'me']);
 
-Route::group(['middleware' => 'jwt'], function () {
+Route::group(['middleware' => 'jwt', 'web'], function () {
     Route::get('/api/all', [ApiController::class, 'all']);
     Route::get('/api/customers', [ApiController::class, 'customers']);
     Route::get('/api/customerid', [ApiController::class, 'customerID']);
