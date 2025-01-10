@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+
+use \Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -15,6 +17,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // Add global middleware here
+        \Illuminate\Http\Middleware\HandleCors::class,
     ];
 
     /**
@@ -30,6 +33,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             'bindings',
+            \Illuminate\Http\Middleware\HandleCors::class,
         ],
     ];
 

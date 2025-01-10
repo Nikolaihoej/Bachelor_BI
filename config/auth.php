@@ -58,13 +58,18 @@ return [
     | Supported: "database", "eloquent"
     |
     */
-/**
- *     'providers' => [
- *       'users' => [
- *           'driver' => 'eloquent',
- *           'model' => env('AUTH_MODEL', App\Models\Users::class),
- *       ],
- */
+
+    // 'providers' => [
+    //     'users' => [
+    //         'driver' => 'eloquent',
+    //         'model' => env('AUTH_MODEL', App\Models\Users::class),
+    //     ],
+
+    //     // 'users' => [
+    //     //     'driver' => 'database',
+    //     //     'table' => 'users',
+    //     // ],
+    // ],
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
