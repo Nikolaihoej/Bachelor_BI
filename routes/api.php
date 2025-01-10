@@ -6,9 +6,9 @@ use App\Http\Controllers\AuthController;
 // use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\VerifyCsrfToken;
 
-// Route::get('/csrf-token', function () {
-//     return response()->json(['csrfToken' => csrf_token()]);
-// });
+Route::get('/csrf-token', function () {
+    return response()->json(['csrfToken' => csrf_token()]);
+});
 
 // CSRF-protected routes
 Route::group(['middleware' => VerifyCsrfToken::class], function () {
