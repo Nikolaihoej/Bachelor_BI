@@ -24,7 +24,7 @@ public function loginUser(Request $request)
         }
 
         Log::warning('Login failed for user:', ['email' => $credentials['email']]);
-        return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     public function register(Request $request)
