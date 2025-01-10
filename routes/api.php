@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\JwtMiddleware;
 // use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\VerifyCsrfToken;
 
@@ -16,7 +17,7 @@ Route::get('/csrf-token', function () {
     Route::post('/api/logout', [AuthController::class, 'logout']);
     Route::get('/api/me', [AuthController::class, 'me']);
 
-Route::group(['middleware' => 'jwt'], function () {
+Route::middleware(JwtMiddleware::class, 'api')->group(function () {
     Route::get('/api/all', [ApiController::class, 'all']);
     Route::get('/api/customers', [ApiController::class, 'customers']);
     Route::get('/api/customerid', [ApiController::class, 'customerID']);
