@@ -4,15 +4,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\VerifyCsrfToken as Middleware;
 
 // Route::get('/csrf-token', function () {
 //     return response()->json(['csrfToken' => csrf_token()]);
 // });
 
-Route::post('/login', [AuthController::class, 'loginUser']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/api/logout', [AuthController::class, 'logout']);
-Route::get('/api/me', [AuthController::class, 'me']);
+// CSRF-protected routes
+Route::group(['middleware' => VerifyCsrfToken::class], function () {
+    Route::post('/login', [AuthController::class, 'loginUser']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/api/logout', [AuthController::class, 'logout']);
+    Route::get('/api/me', [AuthController::class, 'me']);
+});
 
 Route::group(['middleware' => 'jwt', 'api'], function () {
     Route::get('/api/all', [ApiController::class, 'all']);

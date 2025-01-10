@@ -5,6 +5,7 @@ namespace App\Http;
 
 use \Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use \App\Http\Middleware\VerifyCsrfToken;
 
 class Kernel extends HttpKernel
 {
@@ -28,12 +29,14 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             // Add web middleware here
+            \App\Http\Middleware\VerifyCsrfToken::class,
         ],
 
         'api' => [
             'throttle:api',
             'bindings',
             \Illuminate\Http\Middleware\HandleCors::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
         ],
     ];
 
