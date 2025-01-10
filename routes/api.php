@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use App\Http\Middleware\VerifyCsrfToken as Middleware;
+// use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\VerifyCsrfToken;
 
 // Route::get('/csrf-token', function () {
 //     return response()->json(['csrfToken' => csrf_token()]);
