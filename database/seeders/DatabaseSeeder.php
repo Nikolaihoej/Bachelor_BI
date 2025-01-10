@@ -6,7 +6,7 @@ use App\Models\Customer;
 use App\Models\MembershipType;
 use App\Models\CustomerActivityStatus;
 use App\Models\FactTable;
-use App\Models\Users;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create a user
-        Users::factory(1)->create();
+        User::factory(1)->create();
 
         // Create 100 Customer records
         Customer::factory(100)->create();

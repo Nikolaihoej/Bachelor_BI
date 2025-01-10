@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Users;
+use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 
@@ -14,24 +14,22 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         Log::info('Attempting login for user:', ['email' => $credentials['email']]);
-    
-        if (!$token = Auth::attempt($credentials)) {
-            Log::warning('Login failed for user:', ['email' => $credentials['email']]);
-            return response()->json(['error' => 'Unauthorized'], 401);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = JWTAuth::fromUser($user);
+
+            Log::info('Login successful for user:', ['email' => $credentials['email']]);
+            return redirect()->intended('/dashboard')->with('token', $token);
         }
-    
-        $user = Auth::users(); // Correct method to get the authenticated user
-        $user->jwt_token = $token;
-        $user->save();
-    
-        Log::info('Login successful for user:', ['email' => $credentials['email']]);
-    
-        return response()->json(['token' => $token]);
+
+        Log::warning('Login failed for user:', ['email' => $credentials['email']]);
+        return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
     }
 
     public function register(Request $request)
     {
-        $user = Users::create([
+        $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);

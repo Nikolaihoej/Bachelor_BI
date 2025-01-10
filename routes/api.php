@@ -9,8 +9,9 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrfToken' => csrf_token()]);
 });
 
-Route::post('/api/loginUser', [AuthController::class, 'loginUser']);
-Route::post('/api/register', [AuthController::class, 'register']);
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'loginUser']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/api/logout', [AuthController::class, 'logout']);
 Route::get('/api/me', [AuthController::class, 'me']);
 

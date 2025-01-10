@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Users extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users'; // Tabellenavn
+    protected $table = 'user'; // Tabellenavn
     protected $primaryKey = 'email'; // Primær nøgle
+    public $incrementing = false; // Primary key is not an incrementing integer
+    protected $keyType = 'string'; // Primary key type
 
     protected $fillable = [
         'email',
