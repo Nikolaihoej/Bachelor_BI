@@ -12,10 +12,12 @@ class AuthController extends Controller
 {
 public function loginUser(Request $request)
     {
+        Log::info('juhu');
         $credentials = $request->only('email', 'password');
         Log::info('Attempting login for user:', ['email' => $credentials['email']]);
 
         if (Auth::attempt($credentials)) {
+            Log::info('wuhu');
             $user = Auth::user();
             $token = JWTAuth::fromUser($user);
 

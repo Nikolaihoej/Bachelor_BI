@@ -11,14 +11,12 @@ Route::get('/csrf-token', function () {
 });
 
 // CSRF-protected routes
-Route::group(['middleware' => VerifyCsrfToken::class], function () {
     Route::post('/login', [AuthController::class, 'loginUser']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/api/logout', [AuthController::class, 'logout']);
     Route::get('/api/me', [AuthController::class, 'me']);
-});
 
-Route::group(['middleware' => 'jwt', 'api'], function () {
+Route::group(['middleware' => 'jwt'], function () {
     Route::get('/api/all', [ApiController::class, 'all']);
     Route::get('/api/customers', [ApiController::class, 'customers']);
     Route::get('/api/customerid', [ApiController::class, 'customerID']);

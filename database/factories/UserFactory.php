@@ -2,6 +2,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 
 class UserFactory extends Factory
 {
@@ -9,7 +10,7 @@ class UserFactory extends Factory
     {
         return [ 
             'email' => 'fitcenter@email.com',
-            'password' => 'notsafe', // Generer et hash af "notsafe"
+            'password' => Hash::make('notsafe') // Generer et hash af "notsafe"
         ];
     }
 }

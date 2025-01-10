@@ -29,14 +29,14 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             // Add web middleware here
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            // \App\Http\Middleware\VerifyCsrfToken::class,
         ],
 
         'api' => [
             'throttle:api',
             'bindings',
             \Illuminate\Http\Middleware\HandleCors::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            // \App\Http\Middleware\VerifyCsrfToken::class,
         ],
     ];
 

@@ -14,6 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         // Tilføj undtagelser her, fx: 'api/*'
         'api/*',
-        '*', // Allow all routes to bypass CSRF verification
+        'web/*', // Allow all routes to bypass CSRF verification
+        
     ];
 }
