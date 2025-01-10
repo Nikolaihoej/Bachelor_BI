@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-    public function loginUser(Request $request)
+public function loginUser(Request $request)
     {
         $credentials = $request->only('email', 'password');
         Log::info('Attempting login for user:', ['email' => $credentials['email']]);
@@ -20,7 +20,7 @@ class AuthController extends Controller
             $token = JWTAuth::fromUser($user);
 
             Log::info('Login successful for user:', ['email' => $credentials['email']]);
-            return redirect()->intended('/dashboard')->with('token', $token);
+            return response()->json(['token' => $token]);
         }
 
         Log::warning('Login failed for user:', ['email' => $credentials['email']]);
