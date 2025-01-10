@@ -5,9 +5,9 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
-Route::get('/csrf-token', function () {
-    return response()->json(['csrfToken' => csrf_token()]);
-});
+// Route::get('/csrf-token', function () {
+//     return response()->json(['csrfToken' => csrf_token()]);
+// });
 
 Route::post('/login', [AuthController::class, 'loginUser']);
 Route::post('/register', [AuthController::class, 'register']);
