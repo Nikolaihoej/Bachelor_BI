@@ -34,6 +34,12 @@ class DashboardController extends Controller
         return response()->json($dashboards);
     }
 
+    public function getOne($id) //Read one dashboards
+    {
+        $dashboard = Dashboard::findOrFail($id);
+        return response()->json($dashboard);
+    }
+
     public function updateTitle(Request $request, $id) //Update the title of a dashboard
     {
         $request->validate([

@@ -15,7 +15,8 @@ Route::middleware(JwtMiddleware::class, 'api')->group(function () {
     Route::get('/api/all', [ApiController::class, 'all']);
 
     Route::post('/api/dashboard', [DashboardController::class, 'store']);
-    Route::get('/api/dashboards', [DashboardController::class, 'index']);
+    Route::get('/api/getdashboards', [DashboardController::class, 'index']);
+    Route::get('/api/getdashboard/{id}', [DashboardController::class, 'getOne']);
     Route::put('/api/dashboard/{id}/title', [DashboardController::class, 'updateTitle']);
     Route::delete('/api/dashboard/{id}', [DashboardController::class, 'destroy']);
 
