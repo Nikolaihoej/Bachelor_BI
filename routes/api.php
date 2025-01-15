@@ -5,14 +5,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\JwtMiddleware;
 use App\Http\Controllers\DashboardController;
-// use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-// use App\Http\Middleware\VerifyCsrfToken;
 
-// Route::get('/csrf-token', function () {
-//     return response()->json(['csrfToken' => csrf_token()]);
-// });
-
-// CSRF-protected routes
     Route::post('/login', [AuthController::class, 'loginUser']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
