@@ -47,7 +47,7 @@ class DashboardController extends Controller
         // Log the successful update
         Log::info('Dashboard title updated successfully', ['dashboard_id' => $id, 'new_title' => $request->title]);
 
-        return response()->json(['message' => 'Dashboard title updated successfully'], 200);
+        return response()->json($dashboard, 201);
     }
 
     public function destroy($id) //Delete a dashboard
