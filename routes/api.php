@@ -20,7 +20,7 @@ Route::get('/csrf-token', function () {
 
 Route::middleware(JwtMiddleware::class, 'api')->group(function () {
     Route::get('/api/all', [ApiController::class, 'all']);
-    Route::post('/dashboard', [DashboardController::class, 'store']);
+    Route::post('/api/dashboard', [DashboardController::class, 'store']);
     Route::get('/api/customers', [ApiController::class, 'customers']);
     Route::get('/api/customerid', [ApiController::class, 'customerID']);
     Route::get('/api/customername', [ApiController::class, 'customerName']);
