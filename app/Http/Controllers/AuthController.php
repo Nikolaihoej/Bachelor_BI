@@ -10,25 +10,27 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-public function loginUser(Request $request)
+
+    public function loginUser(Request $request)
     {
-        Log::info('juhu');
         $credentials = $request->only('email', 'password');
         Log::info('Attempting login for user:', ['email' => $credentials['email']]);
 
         if (Auth::attempt($credentials)) {
-            Log::info('wuhu');
             $user = Auth::user();
             $token = JWTAuth::fromUser($user);
 
             Log::info('Login successful for user:', ['email' => $credentials['email']]);
             return response()->json(['token' => $token]);
         }
-
+        
         Log::warning('Login failed for user:', ['email' => $credentials['email']]);
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
+    /*
+    Functions for later development regarding user registration, logout and the user's own information
+    */
     public function register(Request $request)
     {
         $user = User::create([
