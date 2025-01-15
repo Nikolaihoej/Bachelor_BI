@@ -10,13 +10,8 @@ class Dashboard extends Model
 
     protected $table = 'dashboards';
 
-    protected $primaryKey = 'id';
-
     protected $fillable = [
-        'data',
-    ];
-
-    protected $casts = [
-        'data' => 'array',
+        'title',
+        'category',
     ];
 }

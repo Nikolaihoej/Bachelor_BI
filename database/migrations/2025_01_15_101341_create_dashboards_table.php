@@ -8,8 +8,9 @@ class CreateDashboardsTable extends Migration
     public function up()
     {
         Schema::create('dashboards', function (Blueprint $table) {
-            $table->id('id');
-            $table->json('data');
+            $table->id();
+            $table->string('title');
+            $table->string('category');
             $table->timestamps();
         });
     }
