@@ -16,6 +16,8 @@ Route::middleware(JwtMiddleware::class, 'api')->group(function () {
 
     Route::post('/api/dashboard', [DashboardController::class, 'store']);
     Route::get('/api/dashboards', [DashboardController::class, 'index']);
+    Route::put('/api/dashboard/{id}/title', [DashboardController::class, 'updateTitle']);
+    Route::delete('/api/dashboard/{id}', [DashboardController::class, 'destroy']);
 
     Route::get('/api/customers', [ApiController::class, 'customers']);
     Route::get('/api/customerid', [ApiController::class, 'customerID']);
