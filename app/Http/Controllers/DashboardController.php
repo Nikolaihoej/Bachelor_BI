@@ -10,14 +10,16 @@ class DashboardController extends Controller
     public function store(Request $request)
     {
         // Log the incoming request data
-        Log::info('Storing new dashboard', ['data' => $request->data]);
+        Log::info('Storing new dashboard', ['title' => $request->title, 'category' => $request->category]);
 
         $request->validate([
-            'data' => 'required|json',
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
         ]);
 
         $dashboard = new Dashboard();
-        $dashboard->data = $request->data;
+        $dashboard->title = $request->title;
+        $dashboard->category = $request->category;
         $dashboard->save();
 
         // Log the successful storage
