@@ -18,4 +18,10 @@ class DashboardController extends Controller
 
         return response()->json(['message' => 'Dashboard saved successfully'], 201);
     }
+
+    public function index()
+    {
+        $dashboards = Dashboard::all();
+        return response()->json($dashboards);
+    }
 }

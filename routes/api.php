@@ -8,9 +8,9 @@ use App\Http\Controllers\DashboardController;
 // use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 // use App\Http\Middleware\VerifyCsrfToken;
 
-Route::get('/csrf-token', function () {
-    return response()->json(['csrfToken' => csrf_token()]);
-});
+// Route::get('/csrf-token', function () {
+//     return response()->json(['csrfToken' => csrf_token()]);
+// });
 
 // CSRF-protected routes
     Route::post('/login', [AuthController::class, 'loginUser']);
@@ -20,7 +20,10 @@ Route::get('/csrf-token', function () {
 
 Route::middleware(JwtMiddleware::class, 'api')->group(function () {
     Route::get('/api/all', [ApiController::class, 'all']);
+
     Route::post('/api/dashboard', [DashboardController::class, 'store']);
+    Route::get('/api/dashboards', [DashboardController::class, 'index']);
+
     Route::get('/api/customers', [ApiController::class, 'customers']);
     Route::get('/api/customerid', [ApiController::class, 'customerID']);
     Route::get('/api/customername', [ApiController::class, 'customerName']);
