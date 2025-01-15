@@ -25,7 +25,7 @@ class DashboardController extends Controller
         // Log the successful storage
         Log::info('Dashboard stored successfully', ['dashboard_id' => $dashboard->id]);
 
-        return response()->json(['message' => 'Dashboard saved successfully'], 201);
+        return response()->json($dashboard, 201);
     }
 
     public function index() //Read all dashboards
