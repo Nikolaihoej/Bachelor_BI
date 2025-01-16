@@ -11,6 +11,8 @@ use App\Http\Controllers\DashboardController;
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/api/me', [AuthController::class, 'me']);
 
+    Route::post('/api/csv', [ApiController::class, 'csv']);
+
 Route::middleware(JwtMiddleware::class, 'api')->group(function () {
     Route::get('/api/all', [ApiController::class, 'all']);
 
