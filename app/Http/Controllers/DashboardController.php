@@ -22,7 +22,6 @@ class DashboardController extends Controller
         $dashboard->category = $request->category;
         $dashboard->save();
 
-        // Log the successful storage
         Log::info('Dashboard stored successfully', ['dashboard_id' => $dashboard->id]);
 
         return response()->json($dashboard, 201);
@@ -50,7 +49,6 @@ class DashboardController extends Controller
         $dashboard->title = $request->title;
         $dashboard->save();
 
-        // Log the successful update
         Log::info('Dashboard title updated successfully', ['dashboard_id' => $id, 'new_title' => $request->title]);
 
         return response()->json($dashboard, 201);
@@ -61,7 +59,6 @@ class DashboardController extends Controller
         $dashboard = Dashboard::findOrFail($id);
         $dashboard->delete();
 
-        // Log the successful deletion
         Log::info('Dashboard deleted successfully', ['dashboard_id' => $id]);
 
         return response()->json(['message' => 'Dashboard deleted successfully'], 200);

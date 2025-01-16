@@ -137,122 +137,12 @@ class ApiController extends Controller
     }
 
     /*
-        Get all data
+        Get all customer data
     */
     public function all()
     {
         $factTables = FactTable::with(['customer', 'activityStatus', 'membershipType'])->get();
 
         return response()->json($factTables);
-    }
-
-    /*
-        Customers table
-    */
-    public function customers()
-    {
-        $customers = Customer::all();
-        return response()->json($customers);
-    }
-
-    /*
-        Customers columns
-    */
-    public function customerID()
-    {
-        $customerIDs = Customer::pluck('CustomerID');
-        return response()->json($customerIDs);
-    }
-
-    public function customerName()
-    {
-        $customerNames = Customer::pluck('Name');
-        return response()->json($customerNames);
-    }
-
-    public function customerAddress()
-    {
-        $customerAddresses = Customer::pluck('Address');
-        return response()->json($customerAddresses);
-    }
-
-    public function customerAge()
-    {
-        $customerAges = Customer::pluck('Age');
-        return response()->json($customerAges);
-    }
-
-    public function signupDate()
-    {
-        $signupDate = Customer::pluck('Signup_Date');
-        return response()->json($signupDate);
-    }
-
-
-    /*
-      customer_activity_status table
-    */
-    public function customersActivityStatus()
-    {
-        $customersActivityStatus = CustomerActivityStatus::all();
-        return response()->json($customersActivityStatus);
-    }
-
-    /*
-        customer_activity_status columns
-    */
-    public function activityStatusID()
-    {
-        $activityStatusID = CustomerActivityStatus::pluck('ActivityStatusID');
-        return response()->json($activityStatusID);
-    }
-
-    public function memberSinceMonths()
-    {
-        $memberSinceMonths = CustomerActivityStatus::pluck('MemberSinceMonths');
-        return response()->json($memberSinceMonths);
-    }
-
-    public function hasTrainedLastMonth()
-    {
-        $hasTrainedLastMonth = CustomerActivityStatus::pluck('HasTrainedLastMonth');
-        return response()->json($hasTrainedLastMonth);
-    }
-
-    public function daysSinceLastVisit()
-    {
-        $daysSinceLastVisit = CustomerActivityStatus::pluck('DaysSinceLastVisit');
-        return response()->json($daysSinceLastVisit);
-    }
-
-    public function trainingSessionsThisMonth()
-    {
-        $trainingSessionsThisMonth = CustomerActivityStatus::pluck('TrainingSessionsThisMonth');
-        return response()->json($trainingSessionsThisMonth);
-    }
-
-
-    /*
-      membershiptype table
-    */
-    public function membershipType()
-    {
-        $membershipType = MembershipType::all();
-        return response()->json($membershipType);
-    }
-
-    /*
-      membershiptype columnss
-    */
-    public function membershipTypeID()
-    {
-        $membershipTypeID = MembershipType::pluck('MembershipTypeID');
-        return response()->json($membershipTypeID);
-    }
-
-    public function typeName()
-    {
-        $typeName = MembershipType::pluck('TypeName');
-        return response()->json($typeName);
     }
 }
