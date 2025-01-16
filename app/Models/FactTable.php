@@ -15,10 +15,10 @@ class FactTable extends Model
         'MembershipTypeID',
         'ActivityStatusID',
     ];
-
+    //First is foreign key in fact_table, second is primay key in customer table
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'CustomerID', 'CustomerID');
+        return $this->belongsTo(Customer::class, 'CustomerID', 'CustomerID'); 
     }
 
     public function activityStatus()
