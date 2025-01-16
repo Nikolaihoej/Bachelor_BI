@@ -9,12 +9,12 @@ use App\Http\Controllers\DashboardController;
     Route::post('/login', [AuthController::class, 'loginUser']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/api/me', [AuthController::class, 'me']);
+    Route::get('/userinformation', [AuthController::class, 'me']);
 
     Route::post('/api/csv', [ApiController::class, 'csv']);
 
 Route::middleware(JwtMiddleware::class, 'api')->group(function () {
-    Route::get('/api/all', [ApiController::class, 'all']);
+    Route::get('/api/all', [ApiController::class, 'all']); //Read all customer data
 
     Route::post('/api/dashboard', [DashboardController::class, 'store']); //Create a new dashboard
     Route::get('/api/getdashboards', [DashboardController::class, 'index']); //Read all dashboards
